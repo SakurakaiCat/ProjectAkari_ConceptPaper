@@ -1,0 +1,38 @@
+name: Build PDF
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: XeLaTeX
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install TeX Live
+        uses: xu-cheng/texlive-action@v2
+        with:
+          scheme: full
+          run: make
+
+      # The build is a gate: undefined references, overfull boxes, or missing
+      # glyphs fail the job rather than being silently accepted.
+      - name: Check for build warnings
+        uses: xu-cheng/texlive-action@v2
+        with:
+          scheme: full
+          run: make check
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: concept-paper
+          path: build/main.pdf
+          if-no-files-found: error

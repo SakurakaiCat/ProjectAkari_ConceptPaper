@@ -1,0 +1,46 @@
+%% ===========================================================================
+%%  Project Akari --- Concept Paper
+%%  Master file.
+%%
+%%  Build:   latexmk -xelatex main.tex      (or: make)
+%%  Output:  build/main.pdf
+%%  Engine:  XeLaTeX. Do not use pdflatex or lualatex: the class relies on
+%%           fontspec / unicode-math.
+%% ===========================================================================
+\documentclass{akari}
+
+%% Style package. Must be loaded after the class and before \begin{document}.
+\usepackage{style/akari-envs}
+
+%% ---------------------------------------------------------------------------
+%% Bibliography. Enable when citations are needed; see README.
+%% ---------------------------------------------------------------------------
+% \usepackage[backend=biber,style=authoryear]{biblatex}
+% \addbibresource{refs/references.bib}
+
+%% ---------------------------------------------------------------------------
+%% Document metadata (title, version, status, date ...).
+%% ---------------------------------------------------------------------------
+\input{refs/metadata}
+
+\begin{document}
+
+%% ------------------------------- Front matter -----------------------------
+\maketitle
+\input{frontmatter/abstract}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+%% --------------------------------- Body -----------------------------------
+%% Each chapter lives in its own file under chapters/. Add one \input line
+%% per chapter as the outline is filled in.
+\input{chapters/body}
+
+%% ------------------------------- Back matter ------------------------------
+\clearpage
+% \printbibliography
+\input{backmatter/appendix}
+
+\end{document}
