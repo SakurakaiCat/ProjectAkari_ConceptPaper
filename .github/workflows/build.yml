@@ -9,29 +9,28 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: XeLaTeX
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - name: Install TeX Live
-        uses: xu-cheng/texlive-action@v2
+      # `make check` is a gate: undefined references, missing glyphs, and
+      # overfull boxes fail the job rather than being silently accepted. It
+      # exits non-zero, and the `&&` chain propagates that.
+      - name: Build and verify
+        uses: xu-cheng/texlive-action@v3
         with:
           scheme: full
-          run: make
-
-      # The build is a gate: undefined references, overfull boxes, or missing
-      # glyphs fail the job rather than being silently accepted.
-      - name: Check for build warnings
-        uses: xu-cheng/texlive-action@v2
-        with:
-          scheme: full
-          run: make check
+          run: make && make check
 
       - name: Upload PDF
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: concept-paper
           path: build/main.pdf

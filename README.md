@@ -53,8 +53,7 @@ latexmk -xelatex -interaction=nonstopmode -file-line-error -outdir=build main.te
 ├── backmatter/
 │   └── appendix.tex            revision history, glossary
 ├── figures/brand/              logo in svg / pdf / png
-├── build/                      output (git-ignored except .gitkeep)
-└── scripts/                    helper scripts
+└── build/                      output (git-ignored except .gitkeep)
 ```
 
 `main.tex` is the only file you compile directly. Everything else is pulled in
