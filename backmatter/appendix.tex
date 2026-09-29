@@ -1,0 +1,33 @@
+%% ===========================================================================
+%%  backmatter/appendix.tex
+%%  Appendices: glossary, revision history, external references.
+%% ===========================================================================
+
+\appendix
+
+\section{Revision history}
+\label{app:revisions}
+
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabularx}{\linewidth}{@{}l l l X@{}}
+    \toprule
+    \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Summary} \\
+    \midrule
+    \revrow{v0.1.0}{2026-09-29}{SakurakaiCat}{Initial repository scaffolding.}
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Glossary}
+\label{app:glossary}
+
+\begin{description}
+  \item[Akari] Project codename; from the Japanese 「あかり」, meaning a light.
+  \item[KC] Knowledge component --- an atomic, independently assessable skill.
+  \item[LCMS] Lesson content management system; the lesson AST and publishing
+    pipeline that carries course content into the runtime.
+  \item[ALM] Akari Lesson Markup --- the authoring markup that lowers to the
+    lesson AST.
+\end{description}

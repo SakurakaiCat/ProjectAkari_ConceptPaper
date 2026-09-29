@@ -1,0 +1,46 @@
+# LaTeX build artefacts
+build/*
+!build/.gitkeep
+
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.idx
+*.ilg
+*.ind
+*.ist
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+*.dvi
+*.ps
+*.pdf
+
+# Keep committed PDFs out of the ignore above when they are intentional:
+!figures/**/*.pdf
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# latexmk / TeX Live caches
+.latexmk/
+texmf-var/

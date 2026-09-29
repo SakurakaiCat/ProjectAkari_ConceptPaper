@@ -1,0 +1,164 @@
+%% ===========================================================================
+%%  style/akari-envs.sty
+%%  Shared building blocks for the concept paper: callout boxes, pull quotes,
+%%  code listings, and inline terminology helpers.
+%%
+%%  Load after the class:  \usepackage{style/akari-envs}
+%% ===========================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{akari-envs}[2026/09/29 v0.1.0 Akari concept paper environments]
+
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\RequirePackage{listings}
+
+%% ---------------------------------------------------------------------------
+%% Icons. FontAwesome is used when present, otherwise each icon degrades to a
+%% small filled square so the document still compiles on a bare TeX install.
+%% ---------------------------------------------------------------------------
+\IfFileExists{fontawesome5.sty}{%
+  \RequirePackage{fontawesome5}%
+  \newcommand{\akari@icon@bulb}{\faLightbulb}%
+  \newcommand{\akari@icon@info}{\faInfoCircle}%
+  \newcommand{\akari@icon@warn}{\faExclamationTriangle}%
+  \newcommand{\akari@icon@pen}{\faPen}%
+}{%
+  \newcommand{\akari@icon@bulb}{\textcolor{akariRed}{\rule[0.28em]{0.62em}{0.62em}}}%
+  \newcommand{\akari@icon@info}{\textcolor{akariRed}{\rule[0.28em]{0.62em}{0.62em}}}%
+  \newcommand{\akari@icon@warn}{\textcolor{akariRed}{\rule[0.28em]{0.62em}{0.62em}}}%
+  \newcommand{\akari@icon@pen}{\textcolor{akariRed}{\rule[0.28em]{0.62em}{0.62em}}}%
+}
+
+\makeatletter
+
+%% ---------------------------------------------------------------------------
+%% Shared callout skeleton
+%%   \begin{akari@callout}{<title>}{<frame colour>}{<icon>}
+%% ---------------------------------------------------------------------------
+\newtcolorbox{akari@callout}[3]{
+  breakable, enhanced, sharp corners,
+  colback      = akariTint,
+  colframe     = #2,
+  boxrule      = 0pt,
+  leftrule     = 2.4pt,
+  arc          = 0pt,
+  left         = 3.2mm, right = 3.2mm, top = 2.6mm, bottom = 2.6mm,
+  before skip  = 3.0ex plus 0.6ex, after skip = 3.0ex plus 0.6ex,
+  fonttitle    = \sffamily\bfseries\small,
+  coltitle     = #2,
+  title        = {\raisebox{0.06em}{#3}\;#1},
+  attach title to upper = {\par\vspace{0.5ex}},
+  boxsep       = 0pt,
+}
+
+\newenvironment{akari@plain}[3]
+  {\begin{akari@callout}{#1}{#2}{#3}}
+  {\end{akari@callout}}
+
+%% ---------------------------------------------------------------------------
+%% Public environments. Each takes an optional custom title.
+%% ---------------------------------------------------------------------------
+%% Design rationale, central idea, or a decision worth calling out.
+\newenvironment{keyidea}[1][Design note]
+  {\begin{akari@plain}{#1}{akariRed}{\akari@icon@bulb}}
+  {\end{akari@plain}}
+
+%% Background, scope, or a boundary condition.
+\newenvironment{notice}[1][Note]
+  {\begin{akari@plain}{#1}{akariInkSoft}{\akari@icon@info}}
+  {\end{akari@plain}}
+
+%% Constraint, risk, or known limitation.
+\newenvironment{caution}[1][Constraints and risks]
+  {\begin{akari@plain}{#1}{akariRedDeep}{\akari@icon@warn}}
+  {\end{akari@plain}}
+
+%% Open question or planned work.
+\newenvironment{todo}[1][Open question]
+  {\begin{akari@plain}{#1}{akariInkFaint}{\akari@icon@pen}}
+  {\end{akari@plain}}
+
+%% Pull quote, for design principles and verbatim excerpts.
+\newenvironment{creed}
+  {\begin{list}{}{%
+      \setlength{\leftmargin}{3.6mm}\setlength{\rightmargin}{3mm}%
+      \setlength{\topsep}{2.4ex}\setlength{\itemsep}{0pt}%
+      \setlength{\listparindent}{0pt}\setlength{\parsep}{0.4ex}}\item\relax
+   \sffamily\color{akariInkSoft}\small
+   \begingroup\color{akariRed}\rule{0pt}{1.1em}\endgroup}
+  {\end{list}}
+
+%% ---------------------------------------------------------------------------
+%% Inline helpers
+%% ---------------------------------------------------------------------------
+%% First mention of a term that has a non-English original form.
+\newcommand{\term}[2]{#1 (\textit{#2})}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\file}[1]{\texttt{\small #1}}
+
+%% ---------------------------------------------------------------------------
+%% Code listings
+%%   listings rather than minted, so the build has no Python/pygments
+%%   dependency.
+%% ---------------------------------------------------------------------------
+\definecolor{akariCodeBg}   {HTML}{FAF7F7}
+\definecolor{akariCodeRule} {HTML}{E8DEDD}
+\definecolor{akariCodeKey}  {HTML}{B71C1C}
+\definecolor{akariCodeStr}  {HTML}{6A4B2A}
+\definecolor{akariCodeCmt}  {HTML}{8A8A8E}
+\definecolor{akariCodeNum}  {HTML}{2E5C8A}
+
+\lstdefinestyle{akari}{
+  backgroundcolor   = \color{akariCodeBg},
+  basicstyle        = \ttfamily\fontsize{8.6}{11.6}\selectfont\color{akariInk},
+  keywordstyle      = \bfseries\color{akariCodeKey},
+  stringstyle       = \color{akariCodeStr},
+  commentstyle      = \itshape\color{akariCodeCmt},
+  numberstyle       = \ttfamily\tiny\color{akariInkFaint},
+  numbers           = left,
+  numbersep         = 7pt,
+  frame             = single,
+  rulecolor         = \color{akariCodeRule},
+  framesep          = 3.4mm,
+  xleftmargin       = 3.4mm,
+  xrightmargin      = 1.4mm,
+  showstringspaces  = false,
+  breaklines        = true,
+  breakatwhitespace = false,
+  columns           = fullflexible,
+  keepspaces        = true,
+  upquote           = true,
+  tabsize           = 2,
+  captionpos        = t,
+  aboveskip         = 2.6ex plus 0.5ex,
+  belowskip         = 2.6ex plus 0.5ex,
+}
+
+%% Custom lexers for the languages that appear in this paper.
+\lstdefinelanguage{ts}{
+  morekeywords={const,let,var,function,return,if,else,for,of,in,while,type,interface,export,import,from,async,await,new,class,extends,implements,public,private,readonly,as,satisfies,enum,throw,try,catch,finally,void,null,undefined,true,false,string,number,boolean,never,unknown,any},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]`,
+}
+\lstdefinelanguage{json5like}{
+  morestring=[b]",
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+}
+\lstdefinelanguage{sqlx}{
+  morekeywords={SELECT,FROM,WHERE,JOIN,LEFT,RIGHT,INNER,OUTER,ON,GROUP,BY,ORDER,LIMIT,OFFSET,INSERT,INTO,VALUES,UPDATE,SET,DELETE,CREATE,TABLE,INDEX,VIEW,SCHEMA,ALTER,ADD,COLUMN,PRIMARY,KEY,FOREIGN,REFERENCES,UNIQUE,NOT,NULL,DEFAULT,WITH,RECURSIVE,AS,CASE,WHEN,THEN,ELSE,END,AND,OR,IN,EXISTS,RETURNING,CONFLICT,DO,NOTHING,USING,CONSTRAINT,CHECK,EXTENSION,TYPE,IF},
+  sensitive=false,
+  morecomment=[l]{--},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+}
+
+\lstset{style=akari}
+\newcommand{\lststyle}[1]{\lstset{style=akari,#1}}
+
+\makeatother
+\endinput
